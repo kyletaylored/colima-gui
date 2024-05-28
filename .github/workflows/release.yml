@@ -11,15 +11,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Cache Node.js modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.npm
@@ -40,7 +40,7 @@ jobs:
           override: true
 
       - name: Cache Rust cargo registry
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
@@ -48,7 +48,7 @@ jobs:
             ${{ runner.os }}-cargo-registry-
 
       - name: Cache Rust cargo index
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cargo/index
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
@@ -56,7 +56,7 @@ jobs:
             ${{ runner.os }}-cargo-index-
 
       - name: Cache Rust cargo build
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: target
           key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
@@ -70,7 +70,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: colima-gui-macos
-          path: src-tauri/target/release/bundle/macos/*.app
+          path: src-tauri/target/release/bundle/dmg/*.dmg
+          if-no-files-found: error
 
   release:
     runs-on: ubuntu-latest
@@ -81,7 +82,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: colima-gui-macos
-          path: .
 
       - name: Create release
         id: create_release
@@ -102,6 +102,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./src-tauri/target/release/bundle/macos/*.app
-          asset_name: colima-gui-macos-${{ github.ref }}.app
-          asset_content_type: application/zip
+          asset_path: src-tauri/target/release/bundle/dmg/*.dmg
+          asset_name: colima-gui-macos-${{ github.ref }}.dmg
+          asset_content_type: application/x-apple-diskimage
