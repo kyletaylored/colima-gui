@@ -30,6 +30,26 @@ async fn status_colima(window: Window, debug: bool) -> Result<(), String> {
 }
 
 #[command]
+async fn delete_colima(window: Window, debug: bool) -> Result<(), String> {
+    stream_command_output(window, "colima delete", debug).await
+}
+
+#[command]
+async fn list_colima(window: Window, debug: bool) -> Result<(), String> {
+    stream_command_output(window, "colima list", debug).await
+}
+
+#[command]
+async fn prune_colima(window: Window, debug: bool) -> Result<(), String> {
+    stream_command_output(window, "colima prune", debug).await
+}
+
+#[command]
+async fn version_colima(window: Window, debug: bool) -> Result<(), String> {
+    stream_command_output(window, "colima version", debug).await
+}
+
+#[command]
 fn open_config() -> Result<String, String> {
     let config_path = dirs::home_dir()
         .ok_or("Cannot find home directory")?
@@ -106,6 +126,10 @@ fn main() {
             stop_colima,
             restart_colima,
             status_colima,
+            delete_colima,
+            list_colima,
+            prune_colima,
+            version_colima,
             open_config
         ])
         .run(tauri::generate_context!())
