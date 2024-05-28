@@ -1,0 +1,32 @@
+{
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "distDir": "../dist",
+    "devPath": "http://localhost:1420",
+    "withGlobalTauri": true
+  },
+  "package": {
+    "productName": "colima-gui",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "windows": [
+      {
+        "title": "Colima Desktop GUI",
+        "width": 800,
+        "height": 600
+      }
+    ],
+    "bundle": {
+      "active": true,
+      "targets": ["dmg", "updater"],
+      "identifier": "com.example.colima-gui",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png"
+      ]
+    }
+  }
+}
