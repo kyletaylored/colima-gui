@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 
+use regex::Regex;
 use std::process::Stdio;
 use tauri::{command, Window};
 use tokio::io::{AsyncBufReadExt, BufReader};
@@ -63,16 +64,30 @@ async fn stream_command_output(window: Window, command: &str, debug: bool) -> Re
 
     let window_clone = window.clone();
     tokio::spawn(async move {
+        let re = Regex::new(r#"msg="([^"]*)""#).unwrap();
         while let Some(line) = reader.next_line().await.unwrap_or(None) {
             println!("STDOUT line: {}", line); // Debugging print
-            window_clone.emit("command-output", line).unwrap();
+            if let Some(caps) = re.captures(&line) {
+                let message = caps.get(1).map_or("", |m| m.as_str());
+                println!("Captured message: {}", message); // Debugging print
+                window_clone.emit("command-output", message.to_string()).unwrap();
+            } else {
+                window_clone.emit("command-output", line).unwrap(); // Emit full line if no match
+            }
         }
     });
 
     tokio::spawn(async move {
+        let re = Regex::new(r#"msg="([^"]*)""#).unwrap();
         while let Some(line) = err_reader.next_line().await.unwrap_or(None) {
             println!("STDERR line: {}", line); // Debugging print
-            window.emit("command-output", line).unwrap();
+            if let Some(caps) = re.captures(&line) {
+                let message = caps.get(1).map_or("", |m| m.as_str());
+                println!("Captured message: {}", message); // Debugging print
+                window.emit("command-output", message.to_string()).unwrap();
+            } else {
+                window.emit("command-output", line).unwrap(); // Emit full line if no match
+            }
         }
     });
 

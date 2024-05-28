@@ -123,13 +123,14 @@ button {
 
 .terminal {
   background-color: black;
-  color: green;
+  color: white;
   padding: 10px;
   margin-top: 20px;
   height: 300px;
   overflow-y: auto;
   white-space: pre-wrap;
   text-align: left; /* Ensure left alignment */
+  font-family: monospace, monospace;
 }
 
 button, label {
