@@ -11,15 +11,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '20'
 
       - name: Cache Node.js modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.npm
@@ -40,7 +40,7 @@ jobs:
           override: true
 
       - name: Cache Rust cargo registry
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
@@ -48,7 +48,7 @@ jobs:
             ${{ runner.os }}-cargo-registry-
 
       - name: Cache Rust cargo index
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cargo/index
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
@@ -56,7 +56,7 @@ jobs:
             ${{ runner.os }}-cargo-index-
 
       - name: Cache Rust cargo build
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: target
           key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
@@ -67,7 +67,7 @@ jobs:
         run: npm run tauri build
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: colima-gui-macos
           path: src-tauri/target/release/bundle/macos/*.app
@@ -78,7 +78,7 @@ jobs:
 
     steps:
       - name: Download artifact from build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: colima-gui-macos
           path: .
