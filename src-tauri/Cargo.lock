@@ -337,6 +337,7 @@ name = "colima-gui"
 version = "0.0.0"
 dependencies = [
  "dirs",
+ "regex",
  "tauri",
  "tauri-build",
  "tokio",

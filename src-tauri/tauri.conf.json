@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "colima-gui",
+    "productName": "Colima GUI",
     "version": "0.1.0"
   },
   "tauri": {
@@ -21,7 +21,7 @@
     "bundle": {
       "active": true,
       "targets": ["dmg", "updater"],
-      "identifier": "com.example.colima-gui",
+      "identifier": "com.kyletaylored.colima-gui",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",

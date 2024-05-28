@@ -4,27 +4,27 @@
 )]
 
 use std::process::Stdio;
-use tauri::{command, Manager};
+use tauri::{command, Window};
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::process::Command;
 
 #[command]
-async fn start_colima(window: tauri::Window, debug: bool) -> Result<(), String> {
+async fn start_colima(window: Window, debug: bool) -> Result<(), String> {
     stream_command_output(window, "colima start", debug).await
 }
 
 #[command]
-async fn stop_colima(window: tauri::Window, debug: bool) -> Result<(), String> {
+async fn stop_colima(window: Window, debug: bool) -> Result<(), String> {
     stream_command_output(window, "colima stop", debug).await
 }
 
 #[command]
-async fn restart_colima(window: tauri::Window, debug: bool) -> Result<(), String> {
+async fn restart_colima(window: Window, debug: bool) -> Result<(), String> {
     stream_command_output(window, "colima restart", debug).await
 }
 
 #[command]
-async fn status_colima(window: tauri::Window, debug: bool) -> Result<(), String> {
+async fn status_colima(window: Window, debug: bool) -> Result<(), String> {
     stream_command_output(window, "colima status", debug).await
 }
 
@@ -45,7 +45,9 @@ fn open_config() -> Result<String, String> {
     }
 }
 
-async fn stream_command_output(window: tauri::Window, command: &str, debug: bool) -> Result<(), String> {
+async fn stream_command_output(window: Window, command: &str, debug: bool) -> Result<(), String> {
+    println!("Running command: {} with debug: {}", command, debug);
+
     let mut cmd = Command::new("sh")
         .arg("-c")
         .arg(command)
@@ -62,17 +64,15 @@ async fn stream_command_output(window: tauri::Window, command: &str, debug: bool
     let window_clone = window.clone();
     tokio::spawn(async move {
         while let Some(line) = reader.next_line().await.unwrap_or(None) {
-            if debug || (!debug && !line.contains("[debug]") && !line.contains("[info]")) {
-                window_clone.emit("command-output", line).unwrap();
-            }
+            println!("STDOUT line: {}", line); // Debugging print
+            window_clone.emit("command-output", line).unwrap();
         }
     });
 
     tokio::spawn(async move {
         while let Some(line) = err_reader.next_line().await.unwrap_or(None) {
-            if debug || (!debug && !line.contains("[debug]") && !line.contains("[info]")) {
-                window.emit("command-output", line).unwrap();
-            }
+            println!("STDERR line: {}", line); // Debugging print
+            window.emit("command-output", line).unwrap();
         }
     });
 

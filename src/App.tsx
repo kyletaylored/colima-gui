@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { invoke } from '@tauri-apps/api/tauri';
 import { listen } from '@tauri-apps/api/event';
-import Ansi from 'ansi-to-react';
 
 function App() {
   const [output, setOutput] = useState<string[]>([]);
@@ -10,6 +9,7 @@ function App() {
 
   useEffect(() => {
     const unlisten = listen<string>('command-output', (event) => {
+      console.log('Received event:', event.payload); // Debugging print
       setOutput((prevOutput) => [...prevOutput, event.payload]);
     });
 
@@ -20,6 +20,7 @@ function App() {
 
   const handleClick = async (command: string) => {
     try {
+      setOutput((prevOutput) => [...prevOutput, `$ ${command}`]); // Add command to output
       await invoke(command, { window: window.__TAURI__.window.getCurrent(), debug });
     } catch (error) {
       alert('Error: ' + error);
@@ -32,9 +33,8 @@ function App() {
       <button onClick={() => handleClick('start_colima')}>Start Colima</button>
       <button onClick={() => handleClick('stop_colima')}>Stop Colima</button>
       <button onClick={() => handleClick('restart_colima')}>Restart Colima</button>
-      <button onClick={() => handleClick('status_colima')}>View Colima Configuration</button>
-      <button onClick={() => handleClick('open_config')}>Edit Colima Configuration</button>
       <button onClick={() => handleClick('status_colima')}>Check Colima Status</button>
+      <button onClick={() => handleClick('open_config')}>Edit Colima Configuration</button>
       <label>
         <input
           type="checkbox"
@@ -46,7 +46,7 @@ function App() {
 
       <div className="terminal">
         {output.map((line, index) => (
-          <Ansi key={index}>{line}</Ansi>
+          <div key={index}>{line}</div>
         ))}
       </div>
     </div>

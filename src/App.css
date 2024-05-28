@@ -135,3 +135,12 @@ button {
 button, label {
   margin: 5px;
 }
+
+.error {
+  color: red;
+}
+
+.warn {
+  color: yellow;
+}
+
