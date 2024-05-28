@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { invoke } from '@tauri-apps/api/tauri';
 import { listen } from '@tauri-apps/api/event';
+import { getCurrent } from '@tauri-apps/api/window';
 
 function App() {
   const [output, setOutput] = useState<string[]>([]);
@@ -28,7 +29,8 @@ function App() {
   const handleClick = async (command: string, label?: string) => {
     try {
       setOutput((prevOutput) => [...prevOutput, `$ ${label || command}`]); // Add command to output
-      await invoke(command, { window: window.__TAURI__.window.getCurrent(), debug });
+      const currentWindow = await getCurrent();
+      await invoke(command, { window: currentWindow, debug });
     } catch (error) {
       alert('Error: ' + error);
     }
