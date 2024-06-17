@@ -13,7 +13,7 @@
   "tauri": {
     "windows": [
       {
-        "title": "Colima Desktop GUI",
+        "title": "Colima GUI",
         "width": 800,
         "height": 600
       }

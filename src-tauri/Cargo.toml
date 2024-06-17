@@ -1,8 +1,8 @@
 [package]
 name = "colima-gui"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+version = "0.0.1"
+description = "A simple GUI for managing Colima."
+authors = ["Kyle Taylor"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -15,8 +15,6 @@ tauri = { version = "1.0", features = [] }
 dirs = "4.0"
 tokio = { version = "1.0", features = ["full"] }
 regex = "1.5"
-# serde = { version = "1", features = ["derive"] }
-# serde_json = "1"
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!
