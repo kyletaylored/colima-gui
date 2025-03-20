@@ -60,7 +60,7 @@ function App() {
           <Button variant="contained" onClick={() => handleClick('open_config', 'open ~/.colima/default/colima.yaml')}>Edit Config</Button>
           <Button variant="contained" onClick={() => handleClick('delete_colima', 'colima delete')}>Delete</Button>
           <Button variant="contained" onClick={() => handleClick('list_colima', 'colima list')}>List Instances</Button>
-          <Button variant="contained" onClick={() => handleClick('prune_colima', 'colima prune')}>Prune Assets</Button>
+          <Button variant="contained" onClick={() => handleClick('prune_colima', 'colima prune -f')}>Prune Assets</Button>
           <Button variant="contained" onClick={() => handleClick('version_colima', 'colima version')}>Version</Button>
           <FormControlLabel
             control={
