@@ -1,6 +1,6 @@
 [package]
 name = "colima-gui"
-version = "0.0.1"
+version = "0.1.0"
 description = "A simple GUI for managing Colima."
 authors = ["Kyle Taylor"]
 edition = "2021"
